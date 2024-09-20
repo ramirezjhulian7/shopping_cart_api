@@ -314,7 +314,6 @@ Permitir a los usuarios revisar compras anteriores, verificar los productos comp
 4. **Historial de Compras**: Proporciona transparencia al usuario sobre sus transacciones pasadas y permite exportar facturas para su uso personal.
 
 Estas mejoras no solo harán que la aplicación sea más funcional y atractiva para los usuarios finales, sino que también permitirá gestionar múltiples casos de uso que son cruciales para el comercio electrónico.
-"""
 
 ---
 
