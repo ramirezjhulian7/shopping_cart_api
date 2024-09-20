@@ -34,13 +34,6 @@ coverage.xml
 # Alembic
 alembic/versions/*.pyc
 
-# Database
-*.db
-*.sqlite3
-
-# Ignore test artifacts
-test_*.log
-
 # OS generated files
 .DS_Store
 Thumbs.db
