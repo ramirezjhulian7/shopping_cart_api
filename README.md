@@ -80,7 +80,7 @@ Crea y activa un entorno virtual para aislar las dependencias del proyecto:
 ```bash
 python -m venv venv
 source venv/bin/activate  # En Linux/Mac
-venv\Scriptsctivate  # En Windows
+venv\Scripts\activate  # En Windows
 ```
 
 ### Instalar Dependencias
