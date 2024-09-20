@@ -199,10 +199,122 @@ pytest
 
 ## Mejoras y Funcionalidades Futuras
 
-- **Autenticación**: Implementar un sistema de autenticación para que cada usuario tenga su propio carrito.
-- **Descuentos**: Agregar la funcionalidad de aplicar cupones de descuento.
-- **Notificaciones**: Enviar notificaciones cuando un producto esté fuera de stock.
-- **Historial de Compras**: Guardar un historial de las compras realizadas por cada usuario.
+### 1. Autenticación
+
+**Objetivo**: Permitir que cada usuario tenga su propio carrito de compras mediante la autenticación segura de usuarios.
+
+#### Implementación:
+
+1. **Uso de OAuth2 con JWT**: 
+   - Utilizar **OAuth2 con Password Flow** y **JSON Web Tokens (JWT)** para autenticar a los usuarios. Al iniciar sesión, el usuario recibiría un token JWT que se enviaría en cada solicitud para autenticar al usuario.
+   - FastAPI ofrece una implementación nativa para OAuth2 con JWT.
+
+2. **Tabla de Usuarios**:
+   - Crear un modelo `User` en la base de datos para almacenar información del usuario, como:
+     - `id`: Identificador único del usuario.
+     - `email`: Correo electrónico del usuario.
+     - `hashed_password`: Contraseña encriptada.
+     - `is_active`: Un campo para verificar si la cuenta está activa.
+   
+3. **Relación con el Carrito**:
+   - Cada carrito estaría vinculado a un `User`. Se agregaría un campo `user_id` en el modelo `Cart` para asociar el carrito a un usuario específico.
+   - Modificar las consultas para que los carritos y las acciones relacionadas con ellos solo afecten al carrito del usuario autenticado.
+   
+4. **Gestión de Sesiones**:
+   - Al iniciar sesión, el servidor emite un **JWT token**. Este token se almacena en el cliente (localStorage, por ejemplo) y se envía en el **Authorization header** en cada petición.
+
+#### Beneficio:
+Esto permite a los usuarios autenticarse, realizar compras personalizadas y mantener su carrito en múltiples sesiones y dispositivos.
+
+---
+
+### 2. Descuentos
+
+**Objetivo**: Permitir a los usuarios aplicar cupones de descuento a su carrito de compras.
+
+#### Implementación:
+
+1. **Modelo de Cupones**:
+   - Crear un modelo `Coupon` que almacene:
+     - `code`: El código del cupón.
+     - `discount_percentage`: El porcentaje de descuento que se aplicará.
+     - `valid_until`: Fecha de expiración del cupón.
+     - `max_uses`: Número máximo de usos que puede tener el cupón.
+
+2. **Validación del Cupón**:
+   - Agregar un endpoint `/cart/apply_coupon/{coupon_code}` que permita aplicar un cupón al carrito.
+   - Verificar que el cupón sea válido (no haya expirado, tenga usos disponibles y esté activo).
+   - Si el cupón es válido, actualizar el total del carrito restando el porcentaje de descuento del precio total.
+
+3. **Reflejar Descuento en Factura**:
+   - Modificar la lógica de cálculo del total del carrito en la factura para reflejar el descuento aplicado.
+
+4. **Restricciones**:
+   - Implementar restricciones como: algunos cupones solo son válidos para ciertos productos o categorías.
+
+#### Beneficio:
+Permitir la promoción de productos mediante descuentos, lo que incentiva a los usuarios a completar sus compras.
+
+---
+
+### 3. Notificaciones
+
+**Objetivo**: Enviar notificaciones al usuario cuando un producto esté fuera de stock o se realicen actualizaciones en su carrito.
+
+#### Implementación:
+
+1. **Sistema de Notificaciones**:
+   - Usar un servicio como **SendGrid** o **Twilio** para enviar notificaciones por correo electrónico o mensajes SMS.
+   
+2. **WebSockets para Notificaciones en Tiempo Real**:
+   - Implementar **WebSockets** en FastAPI para notificar a los usuarios en tiempo real si el stock de un producto se reduce a cero mientras el producto aún está en su carrito.
+   - El WebSocket se puede conectar cuando el usuario esté en la página del carrito. Si ocurre algún cambio en el stock, el servidor envía un mensaje al cliente.
+
+3. **Colas de Trabajo**:
+   - Para asegurar que las notificaciones por correo electrónico o SMS sean procesadas de manera asíncrona, se puede usar una cola de trabajo como **Celery** junto con **Redis** o **RabbitMQ**.
+
+#### Beneficio:
+Mejorar la experiencia del usuario al informarle de eventos importantes, como cuando el stock se agota para algún ítem en su carrito.
+
+---
+
+### 4. Historial de Compras
+
+**Objetivo**: Guardar un historial de todas las compras que un usuario ha realizado para futuras consultas.
+
+#### Implementación:
+
+1. **Modelo de Historial**:
+   - Crear un modelo `PurchaseHistory` que almacene:
+     - `user_id`: Identificador del usuario que realizó la compra.
+     - `purchase_date`: Fecha y hora de la compra.
+     - `total_amount`: Cantidad total pagada.
+     - `items`: Relación con los ítems comprados (cantidad, precio, etc.).
+
+2. **Al Finalizar Compra**:
+   - Una vez que el usuario completa el proceso de compra, se guardan todos los detalles en el modelo `PurchaseHistory`.
+   - El carrito del usuario se vacía y se crea un nuevo carrito para futuras compras.
+
+3. **Endpoint para Consultar Historial**:
+   - Agregar un endpoint `/users/{user_id}/purchase_history/` que permita consultar el historial de compras de un usuario. El usuario puede filtrar sus compras por fecha o total de compra.
+   
+4. **Exportar Facturas**:
+   - Permitir que el usuario descargue o exporte una factura en formato **PDF** de cualquier compra realizada.
+
+#### Beneficio:
+Permitir a los usuarios revisar compras anteriores, verificar los productos comprados, y descargar facturas para sus registros o garantías.
+
+---
+
+### Resumen de las Mejoras
+
+1. **Autenticación**: Cada usuario podrá gestionar su propio carrito, lo que facilita una experiencia personalizada y segura.
+2. **Descuentos**: Incentiva a los usuarios a completar compras aplicando cupones y ofertas.
+3. **Notificaciones**: Mejora la comunicación entre la aplicación y los usuarios, especialmente en situaciones críticas como falta de stock.
+4. **Historial de Compras**: Proporciona transparencia al usuario sobre sus transacciones pasadas y permite exportar facturas para su uso personal.
+
+Estas mejoras no solo harán que la aplicación sea más funcional y atractiva para los usuarios finales, sino que también permitirá gestionar múltiples casos de uso que son cruciales para el comercio electrónico.
+"""
 
 ---
 
