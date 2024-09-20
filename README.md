@@ -216,3 +216,6 @@ Para cualquier consulta o sugerencia, puedes contactarme a través de:
 - **Git**: [jhulianramirez](https://github.com/ramirezjhulian7/shopping_cart_api)
 
 ![Shopping Cart API](Swagger.png)
+![Shopping Docker](Docker.png)
+![Shopping DockerDB](DockerDB.png)
+![Shopping BDSAMY](BDSAMY.png)
