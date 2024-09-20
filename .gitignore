@@ -31,22 +31,12 @@ nosetests.xml
 coverage.xml
 *.cover
 
-# Docker
-docker-compose.yml
-Dockerfile
-.env
-.env.docker
-.env.*
-
 # Alembic
 alembic/versions/*.pyc
 
 # Database
 *.db
 *.sqlite3
-
-# OpenAPI
-openapi.json
 
 # Ignore test artifacts
 test_*.log
