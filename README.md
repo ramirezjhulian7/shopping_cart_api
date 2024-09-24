@@ -25,9 +25,7 @@
 7. [Gestión de Errores](#gestión-de-errores)
 8. [Pruebas Realizadas](#pruebas-realizadas)
 9. [Mejoras y Funcionalidades Futuras](#mejoras-y-funcionalidades-futuras)
-10. [Contribuciones](#contribuciones)
-11. [Licencia](#licencia)
-12. [Contacto](#contacto)
+10. [Contacto](#contacto)
 
 ---
 
